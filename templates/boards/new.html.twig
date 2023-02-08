@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Boards{% endblock %}
+
+{% block body %}
+    <h1>Create new Boards</h1>
+
+    {{ include('boards/_form.html.twig') }}
+
+    <a href="{{ path('app_boards_index') }}">back to list</a>
+{% endblock %}

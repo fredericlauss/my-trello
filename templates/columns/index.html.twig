@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Columns index{% endblock %}
+
+{% block body %}
+    <h1>Columns index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for column in columns %}
+            <tr>
+                <td>{{ column.id }}</td>
+                <td>{{ column.name }}</td>
+                <td>
+                    <a href="{{ path('app_columns_show', {'id': column.id}) }}">show</a>
+                    <a href="{{ path('app_columns_edit', {'id': column.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_columns_new') }}">Create new</a>
+{% endblock %}
