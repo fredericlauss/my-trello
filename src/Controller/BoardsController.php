@@ -25,6 +25,8 @@ class BoardsController extends AbstractController
     public function new(Request $request, BoardsRepository $boardsRepository): Response
     {
         $board = new Boards();
+        $user = $this->getUser();
+        $board->setOwner($user);
         $form = $this->createForm(BoardsType::class, $board);
         $form->handleRequest($request);
 

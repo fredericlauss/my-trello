@@ -14,7 +14,7 @@ class TicketsType extends AbstractType
         $builder
             ->add('name')
             ->add('columnid')
-            ->add('users')
+            // ->add('users')
         ;
     }
 

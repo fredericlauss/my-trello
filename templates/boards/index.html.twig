@@ -4,12 +4,15 @@
 
 {% block body %}
     <h1>Boards index</h1>
+    <p>mail: {{ app.user.email ?? 'Anonymous user' }}</p>
+
 
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Name</th>
+                <th>Owner</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -18,6 +21,7 @@
             <tr>
                 <td>{{ board.id }}</td>
                 <td>{{ board.name }}</td>
+                {# <td>{{ board.owner }}</td> #}
                 <td>
                     <a href="{{ path('app_boards_show', {'id': board.id}) }}">show</a>
                     <a href="{{ path('app_boards_edit', {'id': board.id}) }}">edit</a>
