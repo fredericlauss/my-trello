@@ -3,12 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Columns;
+use App\Entity\Boards;
 use App\Form\ColumnsType;
 use App\Repository\ColumnsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
 
 #[Route('/columns')]
 class ColumnsController extends AbstractController
@@ -53,18 +55,19 @@ class ColumnsController extends AbstractController
     {
         $form = $this->createForm(ColumnsType::class, $column);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
             $columnsRepository->save($column, true);
-
-            return $this->redirectToRoute('app_columns_index', [], Response::HTTP_SEE_OTHER);
+    
+            return $this->redirectToRoute('app_boards_show', ['id' => $column->getBoard()->getId()], Response::HTTP_SEE_OTHER);
         }
-
+    
         return $this->renderForm('columns/edit.html.twig', [
             'column' => $column,
             'form' => $form,
         ]);
     }
+    
 
     #[Route('/{id}', name: 'app_columns_delete', methods: ['POST'])]
     public function delete(Request $request, Columns $column, ColumnsRepository $columnsRepository): Response
@@ -73,6 +76,34 @@ class ColumnsController extends AbstractController
             $columnsRepository->remove($column, true);
         }
 
-        return $this->redirectToRoute('app_columns_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_boards_show', ['id' => $column->getBoard()->getId()], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/boards/{boardId}/columns/new', name: 'app_board_columns_new', methods: ['GET', 'POST'])]
+    public function newForBoard(Request $request, ColumnsRepository $columnsRepository, EntityManagerInterface $entityManager, $boardId): Response
+    {
+        $board = $entityManager->getRepository(Boards::class)->find($boardId);
+    
+        if (!$board) {
+            throw $this->createNotFoundException('The board does not exist');
+        }
+    
+        $column = new Columns();
+        $column->setBoard($board);
+    
+        $form = $this->createForm(ColumnsType::class, $column);
+    
+        $form->handleRequest($request);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            $columnsRepository->save($column, true);
+    
+            return $this->redirectToRoute('app_boards_show', ['id' => $board->getId()], Response::HTTP_SEE_OTHER);
+        }
+    
+        return $this->renderForm('columns/new.html.twig', [
+            'board' => $board,
+            'form' => $form,
+        ]);
     }
 }

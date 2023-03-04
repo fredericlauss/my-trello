@@ -15,10 +15,6 @@ class ColumnsType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('Board', EntityType::class, [
-                'class' => Boards::class,
-                'choice_label' => 'name',
-            ])
         ;
     }
 

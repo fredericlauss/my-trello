@@ -16,8 +16,11 @@ class BoardsController extends AbstractController
     #[Route('/', name: 'app_boards_index', methods: ['GET'])]
     public function index(BoardsRepository $boardsRepository): Response
     {
+        $user = $this->getUser();
+        $userId = $user->getId();
+        $boards = $boardsRepository->findBy(['Owner' => $user]);
         return $this->render('boards/index.html.twig', [
-            'boards' => $boardsRepository->findAll(),
+            'boards' => $boards,
         ]);
     }
 
@@ -45,10 +48,13 @@ class BoardsController extends AbstractController
     #[Route('/{id}', name: 'app_boards_show', methods: ['GET'])]
     public function show(Boards $board): Response
     {
+        $columns = $board->getColumns();
         return $this->render('boards/show.html.twig', [
             'board' => $board,
+            'columns' => $columns,
         ]);
     }
+
 
     #[Route('/{id}/edit', name: 'app_boards_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Boards $board, BoardsRepository $boardsRepository): Response
