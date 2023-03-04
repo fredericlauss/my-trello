@@ -48,8 +48,10 @@ class BoardsController extends AbstractController
     #[Route('/{id}', name: 'app_boards_show', methods: ['GET'])]
     public function show(Boards $board): Response
     {
+        $columns = $board->getColumns();
         return $this->render('boards/show.html.twig', [
             'board' => $board,
+            'columns' => $columns,
         ]);
     }
 
