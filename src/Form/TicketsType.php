@@ -16,10 +16,6 @@ class TicketsType extends AbstractType
         $builder
             ->add('name')
             // ->add('columnid')
-            ->add('columnid', EntityType::class, [
-                'class' => Columns::class,
-                'choice_label' => 'id',
-            ])
             // ->add('users')
         ;
     }

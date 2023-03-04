@@ -3,12 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Tickets;
+use App\Entity\Columns;
 use App\Form\TicketsType;
 use App\Repository\TicketsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
 
 #[Route('/tickets')]
 class TicketsController extends AbstractController
@@ -75,4 +77,32 @@ class TicketsController extends AbstractController
 
         return $this->redirectToRoute('app_tickets_index', [], Response::HTTP_SEE_OTHER);
     }
+
+#[Route('/new/{columnid}', name: 'app_column_tickets_new', methods: ['GET', 'POST'])]
+public function newForColumn(Request $request, TicketsRepository $ticketsRepository, $columnid): Response
+{
+    $column = $this->getDoctrine()->getRepository(Columns::class)->find($columnid);
+
+    $ticket = new Tickets();
+    $ticket->setColumn($column);
+
+    $form = $this->createForm(TicketsType::class, $ticket);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $ticketsRepository->save($ticket, true);
+
+        $boardId = $column->getBoard()->getId();
+        $boardUrl = $this->generateUrl('app_boards_show', ['id' => $boardId]);
+
+        return $this->redirect($boardUrl);
+    }
+
+    return $this->renderForm('tickets/new.html.twig', [
+        'ticket' => $ticket,
+        'form' => $form,
+    ]);
+}
+
+
 }

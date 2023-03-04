@@ -55,6 +55,7 @@ class BoardsController extends AbstractController
         ]);
     }
 
+
     #[Route('/{id}/edit', name: 'app_boards_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Boards $board, BoardsRepository $boardsRepository): Response
     {
