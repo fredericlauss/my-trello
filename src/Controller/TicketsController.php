@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Tickets;
+use App\Entity\Boards;
 use App\Entity\Columns;
 use App\Form\TicketsType;
 use App\Repository\TicketsRepository;
@@ -68,34 +69,36 @@ class TicketsController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_tickets_delete', methods: ['POST'])]
-    public function delete(Request $request, Tickets $ticket, TicketsRepository $ticketsRepository): Response
+    #[Route('/{id}/{columnid}', name: 'app_tickets_delete', methods: ['POST'])]
+    public function delete(Request $request, Tickets $ticket, TicketsRepository $ticketsRepository, EntityManagerInterface $entityManager, $columnid): Response
     {
+        $column = $entityManager->getRepository(Columns::class)->find($columnid);
         if ($this->isCsrfTokenValid('delete'.$ticket->getId(), $request->request->get('_token'))) {
             $ticketsRepository->remove($ticket, true);
         }
 
-        return $this->redirectToRoute('app_tickets_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_boards_show', ['id' => $column->getBoard()->getId()], Response::HTTP_SEE_OTHER);
     }
 
-#[Route('/new/{columnid}', name: 'app_column_tickets_new', methods: ['GET', 'POST'])]
-public function newForColumn(Request $request, TicketsRepository $ticketsRepository, $columnid): Response
+
+    #[Route('/new/{columnid}', name: 'app_column_tickets_new', methods: ['GET', 'POST'])]
+public function newForColumn(Request $request, TicketsRepository $ticketsRepository, EntityManagerInterface $entityManager, $columnid): Response
 {
-    $column = $this->getDoctrine()->getRepository(Columns::class)->find($columnid);
 
     $ticket = new Tickets();
-    $ticket->setColumn($column);
-
     $form = $this->createForm(TicketsType::class, $ticket);
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
+        // Retrieve the Column entity by its primary key
+        $column = $entityManager->getRepository(Columns::class)->find($columnid);
+
+        // Set the column association for the new ticket
+        $ticket->setColumnid($column);
+
         $ticketsRepository->save($ticket, true);
 
-        $boardId = $column->getBoard()->getId();
-        $boardUrl = $this->generateUrl('app_boards_show', ['id' => $boardId]);
-
-        return $this->redirect($boardUrl);
+        return $this->redirectToRoute('app_boards_show', ['id' => $column->getBoard()->getId()], Response::HTTP_SEE_OTHER);
     }
 
     return $this->renderForm('tickets/new.html.twig', [
@@ -103,6 +106,5 @@ public function newForColumn(Request $request, TicketsRepository $ticketsReposit
         'form' => $form,
     ]);
 }
-
 
 }

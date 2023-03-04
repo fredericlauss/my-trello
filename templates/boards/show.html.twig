@@ -40,7 +40,7 @@
                     {% for ticket in column.tickets %}
                         <li>{{ ticket.name }}</li>
                         <a href="{{ path('app_tickets_edit', {'id': ticket.id}) }}">edit</a>
-                        <form method="post" action="{{ path('app_tickets_delete', {'id': ticket.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                        <form method="post" action="{{ path('app_tickets_delete', {'id': ticket.id, 'columnid': column.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ ticket.id) }}">
                         <button class="btn">Delete</button>
                         </form>
