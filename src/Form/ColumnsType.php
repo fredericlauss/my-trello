@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Columns;
+use App\Entity\Boards;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -13,7 +15,10 @@ class ColumnsType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('Board')
+            ->add('Board', EntityType::class, [
+                'class' => Boards::class,
+                'choice_label' => 'name',
+            ])
         ;
     }
 

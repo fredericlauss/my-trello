@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Tickets;
+use App\Entity\Columns;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -13,7 +15,11 @@ class TicketsType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('columnid')
+            // ->add('columnid')
+            ->add('columnid', EntityType::class, [
+                'class' => Columns::class,
+                'choice_label' => 'id',
+            ])
             // ->add('users')
         ;
     }
