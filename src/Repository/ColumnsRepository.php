@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Columns;
+use App\Entity\Tickets;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -30,14 +31,28 @@ class ColumnsRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Columns $entity, bool $flush = false): void
+    public function remove(Columns $column, bool $flush = false)
     {
-        $this->getEntityManager()->remove($entity);
+        // delete du ticket
+        $tickets = $column->getTickets();
+        foreach ($tickets as $ticket) {
+            $this->_em->remove($ticket);
+        }
+
+        // delte de la columns
+        $this->_em->remove($column);
 
         if ($flush) {
-            $this->getEntityManager()->flush();
+            $this->_em->flush();
         }
     }
+    public function removeTicket(Tickets $ticket): void
+    {
+        $this->getEntityManager()->remove($ticket);
+        $this->getEntityManager()->flush();
+    }
+    
+
 
 //    /**
 //     * @return Columns[] Returns an array of Columns objects

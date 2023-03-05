@@ -80,7 +80,7 @@ class BoardsController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$board->getId(), $request->request->get('_token'))) {
             $boardsRepository->remove($board, true);
         }
-
+    
         return $this->redirectToRoute('app_boards_index', [], Response::HTTP_SEE_OTHER);
     }
 }

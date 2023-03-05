@@ -6,6 +6,7 @@ use App\Entity\Columns;
 use App\Entity\Boards;
 use App\Form\ColumnsType;
 use App\Repository\ColumnsRepository;
+use App\Repository\TicketsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -70,14 +71,20 @@ class ColumnsController extends AbstractController
     
 
     #[Route('/{id}', name: 'app_columns_delete', methods: ['POST'])]
-    public function delete(Request $request, Columns $column, ColumnsRepository $columnsRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$column->getId(), $request->request->get('_token'))) {
-            $columnsRepository->remove($column, true);
+public function delete(Request $request, Columns $column, ColumnsRepository $columnsRepository, TicketsRepository $ticketsRepository): Response
+{
+    if ($this->isCsrfTokenValid('delete'.$column->getId(), $request->request->get('_token'))) {
+        // delete des tickets
+        foreach ($column->getTickets() as $ticket) {
+            $columnsRepository->removeTicket($ticket);
         }
-
-        return $this->redirectToRoute('app_boards_show', ['id' => $column->getBoard()->getId()], Response::HTTP_SEE_OTHER);
+        // Delete de la column
+        $columnsRepository->remove($column, true);
     }
+
+    return $this->redirectToRoute('app_boards_show', ['id' => $column->getBoard()->getId()], Response::HTTP_SEE_OTHER);
+}
+
 
     #[Route('/boards/{boardId}/columns/new', name: 'app_board_columns_new', methods: ['GET', 'POST'])]
     public function newForBoard(Request $request, ColumnsRepository $columnsRepository, EntityManagerInterface $entityManager, $boardId): Response

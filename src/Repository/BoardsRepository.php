@@ -30,15 +30,25 @@ class BoardsRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Boards $entity, bool $flush = false): void
+    public function remove(Boards $board, bool $flush = false)
     {
-        $this->getEntityManager()->remove($entity);
-
+        // Delete des tickets et des columns
+        $columns = $board->getColumns();
+        foreach ($columns as $column) {
+            $tickets = $column->getTickets();
+            foreach ($tickets as $ticket) {
+                $this->_em->remove($ticket);
+            }
+            $this->_em->remove($column);
+        }
+    
+        // Delete du board
+        $this->_em->remove($board);
+    
         if ($flush) {
-            $this->getEntityManager()->flush();
+            $this->_em->flush();
         }
     }
-
 //    /**
 //     * @return Boards[] Returns an array of Boards objects
 //     */
