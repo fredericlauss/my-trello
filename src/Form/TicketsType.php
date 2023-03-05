@@ -14,16 +14,22 @@ class TicketsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
-            // ->add('columnid')
-            // ->add('users')
-        ;
+            ->add('name');
+    
+        if ($options['is_edit']) {
+            $builder->add('columnid', EntityType::class, [
+                'class' => Columns::class,
+                'choice_label' => 'id',
+            ]);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Tickets::class,
+            'is_edit' => false,
         ]);
     }
+
 }
