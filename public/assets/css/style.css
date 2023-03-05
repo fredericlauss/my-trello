@@ -1,0 +1,126 @@
+body {
+    background-color: #f2f2f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    flex-direction: column;
+    gap: 10px;
+}
+
+ul {
+    padding: 0px;
+}
+
+li {
+    list-style: none;
+}
+
+form {
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #312f2f;
+    border-radius: 20px;
+    min-width: 250px;
+    min-height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-delete {
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 20px;
+    min-width: 20px;
+    min-height: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.base-flex-board {
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #312f2f;
+    border-radius: 20px;
+    min-width: 250px;
+    min-height: 250px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.cards-board {
+    background-color: #e0f0eb;
+    padding: 20px;
+    border: 1px solid #312f2f;
+    border-radius: 20px;
+    min-width: 150px;
+    min-height: 150px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.boards-element {
+    background-color: #e0f0eb;
+    padding: 20px;
+    border: 1px solid #312f2f;
+    border-radius: 20px;
+    width: 80%;
+    min-height: 75px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    gap: 10px; 
+}
+
+.table-element {
+    background-color: rgb(255, 249, 244);
+    padding: 20px;
+    border: 1px solid #312f2f;
+    border-radius: 20px;
+    width: 80%;
+    min-height: 150px;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: start;
+    gap: 10px; 
+}
+
+.column-element {
+    background-color: white;
+    padding: 7px;
+    border: 1px solid #312f2f;
+    border-radius: 20px;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+}
+
+.ticket-element {
+    margin-top: 7px;
+    background-color: #e0f0eb;
+    padding: 20px;
+    border: 1px solid #312f2f;
+    border-radius: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    gap: 10px;
+}

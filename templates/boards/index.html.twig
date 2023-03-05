@@ -3,37 +3,30 @@
 {% block title %}Boards index{% endblock %}
 
 {% block body %}
-    <h1>Boards index</h1>
+    <h1>Boards</h1>
     <p>mail: {{ app.user.email ?? 'Anonymous user' }}</p>
 
 
-    <table class="table">
+    {# <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Name</th>
-                <th>Owner</th>
                 <th>actions</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody> #}
+        <div class="base-flex-board">
         {% for board in boards %}
-            <tr>
-                <td>{{ board.id }}</td>
-                <td>{{ board.name }}</td>
-                {# <td>{{ board.owner }}</td> #}
-                <td>
+            <div class="cards-board">
+                {{ board.name }}
                     <a href="{{ path('app_boards_show', {'id': board.id}) }}">show</a>
                     <a href="{{ path('app_boards_edit', {'id': board.id}) }}">edit</a>
-                </td>
-            </tr>
+            </div>
         {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
+                <p>no records found</p>
         {% endfor %}
-        </tbody>
-    </table>
 
     <a href="{{ path('app_boards_new') }}">Create new</a>
+        </div>
 {% endblock %}
