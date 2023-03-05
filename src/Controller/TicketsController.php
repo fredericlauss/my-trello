@@ -35,22 +35,22 @@ class TicketsController extends AbstractController
 
     #[Route('/{id}/edit/{columnid}', name: 'app_tickets_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Tickets $ticket, TicketsRepository $ticketsRepository, EntityManagerInterface $entityManager, $columnid): Response
-    {
-        $column = $entityManager->getRepository(Columns::class)->find($columnid);
-        $form = $this->createForm(TicketsType::class, $ticket);
-        $form->handleRequest($request);
+{
+    $column = $entityManager->getRepository(Columns::class)->find($columnid);
+    $form = $this->createForm(TicketsType::class, $ticket, ['is_edit' => true]);
+    $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $ticketsRepository->save($ticket, true);
+    if ($form->isSubmitted() && $form->isValid()) {
+        $ticketsRepository->save($ticket, true);
 
-            return $this->redirectToRoute('app_boards_show', ['id' => $column->getBoard()->getId()], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->renderForm('tickets/edit.html.twig', [
-            'ticket' => $ticket,
-            'form' => $form,
-        ]);
+        return $this->redirectToRoute('app_boards_show', ['id' => $column->getBoard()->getId()], Response::HTTP_SEE_OTHER);
     }
+
+    return $this->renderForm('tickets/edit.html.twig', [
+        'ticket' => $ticket,
+        'form' => $form,
+    ]);
+}
 
     #[Route('/{id}/{columnid}', name: 'app_tickets_delete', methods: ['POST'])]
     public function delete(Request $request, Tickets $ticket, TicketsRepository $ticketsRepository, EntityManagerInterface $entityManager, $columnid): Response
